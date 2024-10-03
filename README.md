@@ -30,7 +30,7 @@ Save or show the images using plt.show() after applying each filter to visualize
 ## Program:
 ### Developed By   : KOUSALYA A.
 ### Register Number: 212222230068
-```
+```python 
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -46,7 +46,7 @@ plt.axis("off")
 ### 1. Smoothing Filters
 
 #### i) Using Averaging Filter
-```
+```python
 kernel = np.ones((11, 11), np.float32) / 121
 averaging_image = cv2.filter2D(image2, -1, kernel)
 plt.figure(figsize=(10, 8))
@@ -58,7 +58,7 @@ plt.show()
 
 ```
 #### ii) Using Weighted Averaging Filter
-```
+```python
 kernel1 = np.array([[1, 2, 1],[2, 4, 2],[1, 2, 1]]) / 16
 weighted_average_image = cv2.filter2D(image2, -1, kernel1)
 plt.figure(figsize=(10, 8))
@@ -69,7 +69,7 @@ plt.axis("off")
 plt.show()
 ```
 #### iii) Using Gaussian Filter
-```
+```python
 gaussian_blur = cv2.GaussianBlur(image2, (11, 11), 0)
 plt.figure(figsize=(10, 8))
 plt.subplot(1, 2, 2)
@@ -80,7 +80,7 @@ plt.show()
 
 ```
 #### iv) Using Median Filter
-```
+```python
 median_blur = cv2.medianBlur(image2, 11)
 plt.figure(figsize=(10, 8))
 plt.subplot(1, 2, 2)
@@ -92,7 +92,7 @@ plt.show()
 
 ### 2. Sharpening Filters
 #### i) Using Laplacian Kernal
-```
+```python
 sharpened_image = cv2.filter2D(smoothed_image, -1, kernel2)
 plt.figure(figsize=(10, 8))
 plt.subplot(1, 2, 2)
@@ -102,7 +102,7 @@ plt.axis("off")
 plt.show()
 ```
 #### ii) Using Laplacian Operator
-```
+```python
 laplacian = cv2.Laplacian(image2, cv2.CV_64F)
 plt.figure(figsize=(10, 8))
 plt.subplot(1, 2, 2)
