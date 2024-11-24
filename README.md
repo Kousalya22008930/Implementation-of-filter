@@ -34,99 +34,85 @@ Register Number: 212222230068
 ```
 ```python
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
-
-image1 = cv2.imread("spidy.jpg")
-image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
-
-plt.figure(figsize=(7, 3))
-plt.imshow(image2)
+import matplotlib.pyplot as plt
+# Load the image (convert to grayscale for simplicity)
+image = cv2.imread('ex_5.tif', cv2.IMREAD_GRAYSCALE)
+# Display original image
+plt.imshow(image, cmap='gray')
 plt.title("Original Image")
-plt.axis("off")
+plt.axis('off')
 ```
-![1](https://github.com/user-attachments/assets/ba5f3682-5028-44f0-b828-3fdf1eac1fb7)
+![image](https://github.com/user-attachments/assets/bfaec339-067f-42b1-83c2-cfcd932896a0)
 
 ### 1. Smoothing Filters
 
 i) Using Averaging Filter
 ```Python
-kernel = np.ones((11, 11), np.float32) / 121
-averaging_image = cv2.filter2D(image2, -1, kernel)
-
-plt.figure(figsize=(7, 3))
-plt.imshow(averaging_image)
-plt.title("Averaging Filter Image")
-plt.axis("off")
-plt.show()
+kernel = np.ones((4, 4), np.float32) / 9  # Simple 3x3 averaging kernel
+averaged_image = cv2.filter2D(image, -1, kernel)  # Apply the filter
+plt.imshow(averaged_image, cmap='gray')
+plt.title("Averaging Filter")
+plt.axis('off')
 ```
-![2](https://github.com/user-attachments/assets/40b1ac52-ea39-46e7-b457-f9227f6fd5c4)
+![image](https://github.com/user-attachments/assets/984cf000-f563-4f8a-a8d9-27b4dde7c1fd)
 
 ii) Using Weighted Averaging Filter
 ```Python
-kernel1 = np.array([[1, 2, 1],
-                    [2, 4, 2],
-                    [1, 2, 1]]) / 16
+weighted_kernel = np.array([[1, 2, 1], 
+                            [2, 4, 2], 
+                            [1, 2, 1]], np.float32)
 
-weighted_average_image = cv2.filter2D(image2, -1, kernel1)
-plt.figure(figsize=(7, 3))
-plt.imshow(weighted_average_image)
-plt.title("Weighted Average Filter Image")
-plt.axis("off")
-plt.show()
+weighted_kernel = weighted_kernel / weighted_kernel.sum()  # Normalize the weights
+weighted_image = cv2.filter2D(image, -1, weighted_kernel)  # Apply the filter
+plt.imshow(weighted_image, cmap='gray')
+plt.title("Weighted Averaging Filter")
+plt.axis('off')
 ```
-![3](https://github.com/user-attachments/assets/bf59b172-56d5-49c8-af00-33e3d5705d7c)
+![image](https://github.com/user-attachments/assets/c5901495-8f20-4c90-88e1-0487f0dfb7c0)
 
 iii) Using Gaussian Filter
 ```Python
-gaussian_blur = cv2.GaussianBlur(image2, (11, 11), 0)
-
-plt.figure(figsize=(7, 3))
-plt.imshow(gaussian_blur)
-plt.title("Gaussian Blur")
-plt.axis("off")
-plt.show()
+gaussian_image = cv2.GaussianBlur(image, (3, 3), 1)  # Apply Gaussian Blur
+plt.imshow(gaussian_image, cmap='gray')
+plt.title("Gaussian Filter")
+plt.axis('off')
 ```
-![4](https://github.com/user-attachments/assets/84422100-ccf4-4b58-9401-54b2cc4e074d)
+![image](https://github.com/user-attachments/assets/5bba550e-19e4-48fa-88f8-74ac4916cdba)
 
 iv)Using Median Filter
 ```Python
-median_blur = cv2.medianBlur(image2, 11)
-
-plt.figure(figsize=(7, 3))
-plt.imshow(median_blur)
+median_image = cv2.medianBlur(image, 3)  # Apply Median Blur
+plt.imshow(median_image, cmap='gray')
 plt.title("Median Filter")
-plt.axis("off")
-plt.show()
-
+plt.axis('off')
 ```
-![5](https://github.com/user-attachments/assets/02fabe3f-5959-4ebb-aa40-fb0c02a2569a)
+![image](https://github.com/user-attachments/assets/96ee7a12-2c97-44ff-8b0a-77715bc521b8)
+
 
 ### 2. Sharpening Filters
 i) Using Laplacian Linear Kernal
 ```Python
-sharpened_image = cv2.filter2D(image2, -1, kernel1)
+laplacian_kernel = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]], np.float32)  # Laplacian kernel
+laplacian_image = cv2.filter2D(image, -1, laplacian_kernel)  # Apply the Laplacian
+sharpened_laplacian_image = cv2.add(image, laplacian_image)  # Sharpen the image
+plt.imshow(sharpened_laplacian_image, cmap='gray')
+plt.title("Laplacian Kernel")
+plt.axis('off')
 
-plt.figure(figsize=(7, 3))
-plt.imshow(sharpened_image)
-plt.title("Sharpened Image (Laplacian Kernel)")
-plt.axis("off")
-plt.show()
 ```
-![6](https://github.com/user-attachments/assets/63c2808b-bf88-4795-a20c-2acd75952850)
+![image](https://github.com/user-attachments/assets/c7b4f580-9c4a-4075-828f-55ef7950cee5)
 
 ii) Using Laplacian Operator
 ```Python
-laplacian = cv2.Laplacian(image2, cv2.CV_64F)
-
-plt.figure(figsize=(7, 3))
-plt.imshow(laplacian, cmap='gray')
-plt.title("Laplacian Operator Image")
-plt.axis("off")
-plt.show()
-
+laplacian_operator_image = cv2.Laplacian(image, cv2.CV_64F)  # Laplacian operator
+laplacian_operator_image = cv2.convertScaleAbs(laplacian_operator_image)  # Convert to absolute values
+sharpened_operator_image = cv2.add(image, laplacian_operator_image)  # Sharpen the image
+plt.imshow(sharpened_operator_image, cmap='gray')
+plt.title("Laplacian Operator")
+plt.axis('off')
 ```
-![7](https://github.com/user-attachments/assets/bc35065c-7180-455e-b0f0-a0038caeb75c)
+![image](https://github.com/user-attachments/assets/38374bfe-8846-46ce-a9b4-9dce2914c335)
 
 ## Result:
 Thus the filters are designed for smoothing and sharpening the images in the spatial domain.
